@@ -18,10 +18,6 @@ func main() {
 
 ```text
 output:
-
-We are creational patterns!
-
-1. Abstract Factory: 
 Hello World!
 Goodbye World!
 Hello Hello Hello World Very Very Very Much!!!
