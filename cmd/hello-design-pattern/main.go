@@ -5,6 +5,7 @@ import (
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory/factory"
 	"github.com/Margular/hello-design-pattern/creational/builder"
+	"github.com/Margular/hello-design-pattern/creational/factoryMethod"
 )
 
 func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
@@ -22,10 +23,15 @@ func main() {
 	tryAbstractFactory(factory.ExtremeSpeakerFactory{})
 	fmt.Println()
 
-	fmt.Println("2. Builder")
+	fmt.Println("2. Builder: ")
 	hwBuilder := builder.HelloWorldBuilder{}
 	hw := hwBuilder.SetHello("hello").SetWorld("world").Build()
 	hw.Say()
+	fmt.Println()
 
-	// TODO:
+	fmt.Println("3. Factory method: ")
+	var speaker factoryMethod.Speaker
+	hwf := factoryMethod.HelloWorldFactory{}
+	speaker = hwf.CreateSpeaker()
+	fmt.Println(speaker.Words)
 }
