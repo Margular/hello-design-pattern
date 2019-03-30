@@ -1,18 +1,21 @@
 package factory
 
-import "github.com/Margular/hello-design-pattern/creational/abstractFactory"
+import (
+	"fmt"
+	"github.com/Margular/hello-design-pattern/creational/abstractFactory"
+)
 
 // STEP 3: Define an implementation
 type SimplePositiveSpeaker struct {}
 
 func (s SimplePositiveSpeaker) GoodSay() {
-	println("Hello World!")
+	fmt.Println("Hello World!")
 }
 
 type SimpleNegativeSpeaker struct {}
 
 func (s SimpleNegativeSpeaker) BadSay() {
-	println("Goodbye World!")
+	fmt.Println("Goodbye World!")
 }
 
 type SimpleSpeakerFactory struct {}

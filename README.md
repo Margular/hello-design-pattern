@@ -48,13 +48,13 @@ type SpeakerFactory interface {
 type SimplePositiveSpeaker struct {}
 
 func (s SimplePositiveSpeaker) GoodSay() {
-	println("Hello World!")
+	fmt.Println("Hello World!")
 }
 
 type SimpleNegativeSpeaker struct {}
 
 func (s SimpleNegativeSpeaker) BadSay() {
-	println("Goodbye World!")
+	fmt.Println("Goodbye World!")
 }
 
 type SimpleSpeakerFactory struct {}
@@ -71,13 +71,13 @@ func (s SimpleSpeakerFactory) CreateNegativeSpeaker() abstractFactory.NegativeSp
 type ExtremePositiveSpeaker struct {}
 
 func (s ExtremePositiveSpeaker) GoodSay() {
-	println("Hello Hello Hello World Very Very Very Much!!!")
+	fmt.Println("Hello Hello Hello World Very Very Very Much!!!")
 }
 
 type ExtremeNegativeSpeaker struct {}
 
 func (e ExtremeNegativeSpeaker) BadSay() {
-	println("Goodbye Goodbye Goodbye World Very Very Very Much!!!")
+	fmt.Println("Goodbye Goodbye Goodbye World Very Very Very Much!!!")
 }
 
 type ExtremeSpeakerFactory struct {}
@@ -88,5 +88,54 @@ func (s ExtremeSpeakerFactory) CreatePositiveSpeaker() abstractFactory.PositiveS
 
 func (s ExtremeSpeakerFactory) CreateNegativeSpeaker() abstractFactory.NegativeSpeaker {
 	return ExtremeNegativeSpeaker{}
+}
+```
+
+### Builder
+```go
+func main() {
+	hwBuilder := builder.HelloWorldBuilder{}
+	hw := hwBuilder.SetHello("hello").SetWorld("world").Build()
+	hw.Say()
+}
+```
+
+```text
+output:
+hello world
+```
+
+```go
+// STEP 1: Define the struct you want to use
+type HelloWorld struct {
+	hello string
+	world string
+}
+
+func (hw HelloWorld) Say() {
+	fmt.Printf("%s %s\n", hw.hello, hw.world)
+}
+
+// STEP 2: Define the builder you want to use to build the struct we've defined before
+type HelloWorldBuilder struct {
+	hello string
+	world string
+}
+
+func (b *HelloWorldBuilder) SetHello(hello string) *HelloWorldBuilder {
+	b.hello = hello
+	return b
+}
+
+func (b *HelloWorldBuilder) SetWorld(world string) *HelloWorldBuilder {
+	b.world = world
+	return b
+}
+
+func (b *HelloWorldBuilder) Build() HelloWorld {
+	return HelloWorld{
+		b.hello,
+		b.world,
+	}
 }
 ```
