@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/Margular/hello-design-pattern/behavioral/chainOfResponsibility"
+	"github.com/Margular/hello-design-pattern/behavioral/command"
+	"github.com/Margular/hello-design-pattern/behavioral/interpreter"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory/factory"
 	"github.com/Margular/hello-design-pattern/creational/builder"
@@ -16,6 +18,8 @@ import (
 	"github.com/Margular/hello-design-pattern/structural/facade"
 	"github.com/Margular/hello-design-pattern/structural/flyweight"
 	"github.com/Margular/hello-design-pattern/structural/proxy"
+	"math/rand"
+	"time"
 )
 
 func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
@@ -26,6 +30,8 @@ func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
 }
 
 func main() {
+	rand.Seed(time.Now().UnixNano())
+
 	fmt.Println("We are creational patterns!\n")
 
 	fmt.Println("1. Abstract Factory: ")
@@ -117,6 +123,22 @@ func main() {
 	theWorld.HandleRequest("Peter")
 	theWorld.HandleRequest("Fox")
 	theWorld.HandleRequest("Tom")
+	fmt.Println()
+
+	fmt.Println("14. Command: ")
+	person := &command.Person{}
+	randName := command.RandName{person}
+	increaseAge := command.IncreaseAge{person}
+	grow := command.Grow{[]command.Command{randName, increaseAge}}
+	grow.Call(); person.Say()
+	grow.Call(); person.Say()
+	grow.Call(); person.Say()
+	fmt.Println()
+
+	fmt.Println("15. Interpreter: ")
+	helloInter := interpreter.HelloInterpreter{}
+	helloInter.RegFunc("println", interpreter.MyPrintln{})
+	helloInter.Interpret("println('hello world')")
 	fmt.Println()
 
 

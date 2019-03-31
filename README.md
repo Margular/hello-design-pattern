@@ -622,3 +622,124 @@ func (p Person) HandleRequest(name string) {
 	p.Successor.HandleRequest(name)
 }
 ```
+
+### Command
+```go
+func main() {
+	person := &command.Person{}
+	randName := command.RandName{person}
+	increaseAge := command.IncreaseAge{person}
+	grow := command.Grow{[]command.Command{randName, increaseAge}}
+	grow.Call(); person.Say()
+	grow.Call(); person.Say()
+	grow.Call(); person.Say()
+}
+```
+
+```text
+output:
+I'm Jerry, I am 1 years old.
+I'm Jerry, I am 2 years old.
+I'm Faker, I am 3 years old.
+```
+
+```go
+// STEP 1: Define a receiver
+type Person struct {
+	name 	string
+	age		uint
+}
+
+func (p Person) Say() {
+	fmt.Printf("I'm %s, I am %d years old.\n", p.name, p.age)
+}
+
+// STEP 2: Define a command interface that have a method called execute()
+type Command interface {
+	Execute()
+}
+
+// STEP 3: Implementation 1
+type RandName struct {
+	P *Person
+}
+
+func (r RandName) Execute() {
+	r.P.name = map[int]string {
+		0 : "Tom",
+		1 : "Jerry",
+		2 : "Faker",
+	}[rand.Intn(3)]
+}
+
+// STEP 4: Implementation 2
+type IncreaseAge struct {
+	P *Person
+}
+
+func (i IncreaseAge) Execute() {
+	i.P.age++
+}
+
+// STEP 4: Define an invoker
+type Grow struct {
+	Cmds []Command
+}
+
+func (g Grow) Call() {
+	for _, cmd := range g.Cmds {
+		cmd.Execute()
+	}
+}
+```
+
+### Interpreter
+```go
+func main() {
+	helloInter := interpreter.HelloInterpreter{}
+	helloInter.RegFunc("println", interpreter.MyPrintln{})
+	helloInter.Interpret("println('hello world')")
+}
+```
+
+```text
+output:
+hello world
+```
+
+```go
+// STEP 1: Define an interface
+type Func interface {
+	call(string)
+}
+
+// STEP 2: Implements the interface
+type MyPrintln struct {}
+
+func (pl MyPrintln) call(param string) {
+	fmt.Println(param)
+}
+
+// STEP 3: Define an interpreter object that have ability to invoke registered functions
+type HelloInterpreter struct {
+	funcs map[string]Func
+}
+
+func (hw *HelloInterpreter) RegFunc(name string, f Func) {
+	if hw.funcs == nil {
+		hw.funcs = map[string]Func{}
+	}
+
+	hw.funcs[name] = f
+}
+
+func (hw *HelloInterpreter) Interpret(expr string) {
+	funcName := strings.TrimSpace(expr[:strings.Index(expr, "(")])
+	f := hw.funcs[funcName]
+
+	after := expr[strings.Index(expr, "(") + 1:]
+	param := strings.Trim(after[:strings.LastIndex(after, ")")], "'")
+
+	f.call(param)
+}
+```
