@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/Margular/hello-design-pattern/behavioral/chainOfResponsibility"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory/factory"
 	"github.com/Margular/hello-design-pattern/creational/builder"
@@ -103,6 +104,19 @@ func main() {
 	var p proxy.Subject
 	p = proxy.Proxy{}
 	p.Request()
+	fmt.Println()
+
+	fmt.Println("We are behavioral patterns!\n")
+
+	fmt.Println("13. Chain of Responsibility: ")
+	peter := chainOfResponsibility.Person{Name : "Peter"}
+	fox := chainOfResponsibility.Person{Name : "Fox", Successor : &peter}
+	steven := chainOfResponsibility.Person{Name : "Steven", Successor : &fox}
+	var theWorld chainOfResponsibility.PersonHandler = chainOfResponsibility.Person{Successor : &steven}
+
+	theWorld.HandleRequest("Peter")
+	theWorld.HandleRequest("Fox")
+	theWorld.HandleRequest("Tom")
 	fmt.Println()
 
 
