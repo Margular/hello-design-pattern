@@ -379,3 +379,152 @@ func (w World) Say() {
 	}
 }
 ```
+
+### Decorator
+```go
+func main() {
+	var dec decorator.PersonDecorator
+	dec = decorator.AnoisingPerson{decorator.Tom{}}
+	dec.Say()
+}
+```
+
+```text
+output:
+Hello World! I'm Tom
+I'm anoising!
+```
+
+```go
+// STEP 1: Define an interface
+type Person interface {
+	Say()
+}
+
+// STEP 2: Define some implementations
+type Tom struct {}
+
+func (t Tom) Say() {
+	fmt.Println("Hello World! I'm Tom")
+}
+
+// STEP 2: Define a decorator that aggregation the interface
+type PersonDecorator interface {
+	Person
+}
+
+// STEP 3: Implements the decorator with 2 things:
+// 1. invoke method of the interface
+// 2. do something else(this calls decorating the interface)
+type AnoisingPerson struct {
+	P Person
+}
+
+func (ap AnoisingPerson) Say() {
+	ap.P.Say()
+	fmt.Println("I'm anoising!")
+}
+```
+
+### Facade
+```go
+func main() {
+	var house facade.House
+	house.AllSay()
+}
+```
+
+```text
+output:
+Hello World! I'm Tom
+Hello World! I'm Jerry
+```
+
+```go
+// STEP 1: Define an object
+type Tom struct {}
+
+func (t Tom) SayTom() {
+	fmt.Println("Hello World! I'm Tom")
+}
+
+// STEP 2: Define another object
+type Jerry struct {}
+
+func (j Jerry) SayJerry() {
+	fmt.Println("Hello World! I'm Jerry")
+}
+
+// STEP 3: Define a facade object to get all objects in one, and privode a method to invoke them internally
+type House struct {
+	t Tom
+	j Jerry
+}
+
+func (h House) AllSay() {
+	h.t.SayTom()
+	h.j.SayJerry()
+}
+```
+
+### Flyweight
+```go
+func main() {
+	flyweight.AnimalFactory().GetAnimal("Tom").Say()
+	flyweight.AnimalFactory().GetAnimal("Tom").Say()
+	flyweight.AnimalFactory().GetAnimal("Jerry").Say()
+	flyweight.AnimalFactory().GetAnimal("Tom").Say()
+	flyweight.AnimalFactory().GetAnimal("Jerry").Say()
+}
+```
+
+```text
+output:
+Hello World! I'm animal 1815427177354915630
+Hello World! I'm animal 1815427177354915630
+Hello World! I'm animal 13895412513112872184
+Hello World! I'm animal 1815427177354915630
+Hello World! I'm animal 13895412513112872184
+```
+
+```go
+// STEP 1: Define an object
+type Animal struct {
+	id 		uint64	// intrinsic
+}
+
+func (a Animal) Say() {
+	fmt.Printf("Hello World! I'm animal %d\n", a.id)
+}
+
+// STEP 2: Define a factory of the object that have a map of objects
+type animalFactory struct {
+	animals map[string]Animal
+}
+
+// STEP 3: Define getObject method of this factory
+func (af animalFactory) GetAnimal(name string) Animal {
+	animal, ok := af.animals[name]
+
+	if ok {
+		return animal
+	}
+
+	animal = Animal{rand.Uint64()}
+	af.animals[name] = animal
+	return animal
+}
+
+// STEP 4(Optional): Singleton design pattern combined
+var af *animalFactory
+
+func AnimalFactory() *animalFactory{
+	if af == nil {
+		af = &animalFactory{
+			map[string]Animal{},
+		}
+	}
+
+	return af
+}
+```

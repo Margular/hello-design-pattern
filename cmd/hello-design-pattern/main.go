@@ -11,6 +11,9 @@ import (
 	"github.com/Margular/hello-design-pattern/structural/adapter"
 	"github.com/Margular/hello-design-pattern/structural/bridge"
 	"github.com/Margular/hello-design-pattern/structural/composite"
+	"github.com/Margular/hello-design-pattern/structural/decorator"
+	"github.com/Margular/hello-design-pattern/structural/facade"
+	"github.com/Margular/hello-design-pattern/structural/flyweight"
 )
 
 func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
@@ -76,5 +79,21 @@ func main() {
 	world.Say()
 	fmt.Println()
 
+	fmt.Println("9. Decorator: ")
+	var dec decorator.PersonDecorator
+	dec = decorator.AnoisingPerson{decorator.Tom{}}
+	dec.Say()
+	fmt.Println()
 
+	fmt.Println("10. Facade: ")
+	var house facade.House
+	house.AllSay()
+	fmt.Println()
+
+	fmt.Println("11. Flyweight: ")
+	flyweight.AnimalFactory().GetAnimal("Tom").Say()
+	flyweight.AnimalFactory().GetAnimal("Tom").Say()
+	flyweight.AnimalFactory().GetAnimal("Jerry").Say()
+	flyweight.AnimalFactory().GetAnimal("Tom").Say()
+	flyweight.AnimalFactory().GetAnimal("Jerry").Say()
 }
