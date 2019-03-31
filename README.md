@@ -288,3 +288,94 @@ func (a Adapter) Say() {
 	a.HW.SayHello()
 }
 ```
+
+### Bridge
+```go
+func main() {
+	var tom = bridge.Person{}
+	tom.M = bridge.HelloMouth{}
+	tom.Speak()
+}
+```
+
+```text
+output:
+Hello World
+```
+
+```go
+// STEP 1: Define an object you want to use and an interface member
+type Person struct {
+	M Mouth
+}
+
+// STEP 2: Define a function that using the ability of the interface member
+func (p Person) Speak() {
+	p.M.Say()
+}
+
+// STEP 3: Define the interface
+type Mouth interface {
+	Say()
+}
+
+// STEP 4: Implements the interface
+type HelloMouth struct {}
+
+func (m HelloMouth) Say() {
+	fmt.Println("Hello World")
+}
+```
+
+### Composite
+```go
+func main() {
+	t := composite.Tom{}
+	j := composite.Jerry{}
+	world := composite.World{
+		[]composite.Speaker{
+			t,
+			j,
+		},
+	}
+	world.Say()
+}
+```
+
+```text
+output:
+Hello World! I'm Tom
+Hello World! I'm Jerry
+```
+
+```go
+// STEP 1: Define an interface that have several methods
+type Speaker interface {
+	Say()
+}
+
+// STEP 2: Define some objects the implements the interface
+type Tom struct {}
+
+func (t Tom) Say() {
+	fmt.Println("Hello World! I'm Tom")
+}
+
+type Jerry struct {}
+
+func (j Jerry) Say() {
+	fmt.Println("Hello World! I'm Jerry")
+}
+
+// STEP 3: Define an object that implements the interface and have a list memeber of the interface
+type World struct{
+	Speakers []Speaker
+}
+
+// STEP 4: Define those methods, commonly invoke all implements of the list member
+func (w World) Say() {
+	for _, speaker := range w.Speakers {
+		speaker.Say()
+	}
+}
+```

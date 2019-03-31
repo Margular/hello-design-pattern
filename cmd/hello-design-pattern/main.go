@@ -9,6 +9,8 @@ import (
 	"github.com/Margular/hello-design-pattern/creational/prototype"
 	"github.com/Margular/hello-design-pattern/creational/singleton"
 	"github.com/Margular/hello-design-pattern/structural/adapter"
+	"github.com/Margular/hello-design-pattern/structural/bridge"
+	"github.com/Margular/hello-design-pattern/structural/composite"
 )
 
 func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
@@ -54,4 +56,25 @@ func main() {
 	var target adapter.Speaker
 	target = adapter.Adapter{adapter.HelloWorld{}}
 	target.Say()
+	fmt.Println()
+
+	fmt.Println("7. Bridge: ")
+	var tom = bridge.Person{}
+	tom.M = bridge.HelloMouth{}
+	tom.Speak()
+	fmt.Println()
+
+	fmt.Println("8. Composite: ")
+	t := composite.Tom{}
+	j := composite.Jerry{}
+	world := composite.World{
+		[]composite.Speaker{
+			t,
+			j,
+		},
+	}
+	world.Say()
+	fmt.Println()
+
+
 }
