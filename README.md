@@ -529,7 +529,7 @@ func AnimalFactory() *animalFactory{
 }
 ```
 
-### Flyweight
+### Proxy
 ```go
 func main() {
 	var p proxy.Subject
