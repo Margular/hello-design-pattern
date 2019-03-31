@@ -8,6 +8,7 @@ import (
 	"github.com/Margular/hello-design-pattern/creational/factoryMethod"
 	"github.com/Margular/hello-design-pattern/creational/prototype"
 	"github.com/Margular/hello-design-pattern/creational/singleton"
+	"github.com/Margular/hello-design-pattern/structural/adapter"
 )
 
 func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
@@ -43,7 +44,14 @@ func main() {
 	options.Print()
 	fmt.Println()
 
-	fmt.Println("5. Singleton")
+	fmt.Println("5. Singleton: ")
 	singleton.HelloWorld().Say()
 	singleton.HelloWorld().Say()
+
+	fmt.Println("\nWe are structural patterns!\n")
+
+	fmt.Println("6. Adapter: ")
+	var target adapter.Speaker
+	target = adapter.Adapter{adapter.HelloWorld{}}
+	target.Say()
 }
