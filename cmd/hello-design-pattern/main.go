@@ -14,6 +14,7 @@ import (
 	"github.com/Margular/hello-design-pattern/structural/decorator"
 	"github.com/Margular/hello-design-pattern/structural/facade"
 	"github.com/Margular/hello-design-pattern/structural/flyweight"
+	"github.com/Margular/hello-design-pattern/structural/proxy"
 )
 
 func tryAbstractFactory(speakerFactory abstractFactory.SpeakerFactory) {
@@ -96,4 +97,13 @@ func main() {
 	flyweight.AnimalFactory().GetAnimal("Jerry").Say()
 	flyweight.AnimalFactory().GetAnimal("Tom").Say()
 	flyweight.AnimalFactory().GetAnimal("Jerry").Say()
+	fmt.Println()
+
+	fmt.Println("12. Proxy: ")
+	var p proxy.Subject
+	p = proxy.Proxy{}
+	p.Request()
+	fmt.Println()
+
+
 }
