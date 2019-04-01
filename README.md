@@ -743,3 +743,181 @@ func (hw *HelloInterpreter) Interpret(expr string) {
 	f.call(param)
 }
 ```
+
+### Mediator
+```go
+func main() {
+	m := mediator.Mediator{}
+
+	c1 := mediator.Collegue{1, &m}
+	c2 := mediator.Collegue{2, &m}
+	c3 := mediator.Collegue{3, &m}
+
+
+	m.Register(&c1)
+	m.Register(&c2)
+	m.Register(&c3)
+
+	c1.SendMsg(2, "Hello Tom")
+	c3.SendMsg(1, "Hello Jerry")
+	c2.SendMsg(1, "Hello Jerry")
+}
+```
+
+```text
+output:
+Hello World! I'm collegue 2, I got msg: Hello Tom
+Hello World! I'm collegue 1, I got msg: Hello Jerry
+Hello World! I'm collegue 1, I got msg: Hello Jerry
+```
+
+```go
+// STEP 1: Define the collegue object
+type Collegue struct {
+	Id int
+	M *Mediator
+}
+
+func (c Collegue) receiveMsg(msg string) {
+	fmt.Printf("Hello World! I'm collegue %d, I got msg: %s\n", c.Id, msg)
+}
+
+func (c Collegue) SendMsg(id int, msg string) {
+	c.M.operation(id, msg)
+}
+
+// STEP 2: Define the Mediator
+type Mediator struct {
+	collegues map[int]Collegue
+}
+
+func (m Mediator) operation(id int, msg string) {
+	m.collegues[id].receiveMsg(msg)
+}
+
+func (m *Mediator) Register(c *Collegue) {
+	if m.collegues == nil {
+		m.collegues = map[int]Collegue{c.Id : *c}
+		return
+	}
+
+	m.collegues[c.Id] = *c
+}
+```
+
+### Memento
+```go
+func main() {
+	originator := memento.Originator{}
+	careTaker := memento.CareTaker{}
+	originator.State = "Hello World"
+	careTaker.Add(originator.SaveStateToMemento())
+	originator.State = "Goodbye World"
+	careTaker.Add(originator.SaveStateToMemento())
+	fmt.Println("Current State: " + originator.State)
+	originator.GetStateFromMemento(careTaker.Get(0))
+	fmt.Println("Current State: " + originator.State)
+}
+```
+
+```text
+output:
+Current State: Goodbye World
+Current State: Hello World
+```
+
+```go
+// STEP 1: Define a memento object that contains some data
+type Memento struct {
+	State string
+}
+
+// STEP 2: Define an originator that has some data, too
+type Originator struct {
+	State string
+}
+
+func (o Originator) SaveStateToMemento() Memento {
+	return Memento{o.State}
+}
+
+func (o *Originator) GetStateFromMemento(m Memento) {
+	o.State = m.State
+}
+
+// STEP 3: Define a caretaker that stores a list of Memento objects
+type CareTaker struct {
+	mementos []Memento
+}
+
+func (ct *CareTaker) Add(m Memento) {
+	if ct.mementos == nil {
+		ct.mementos = []Memento{m}
+		return
+	}
+
+	ct.mementos = append(ct.mementos, m)
+}
+
+func (ct CareTaker) Get(index uint) Memento{
+	return ct.mementos[index]
+}
+```
+
+### State
+```go
+func main() {
+	ctx := state.Context{}
+	ctx.Request()
+	ctx.Request()
+	ctx.Request()
+}
+```
+
+```text
+output:
+Hello World! I'm good
+Hello World! I'm bad
+Hello World! I'm good
+```
+
+```go
+// STEP 1: Define some states
+type State interface {
+	handle()
+}
+
+type StateGood struct {}
+
+func (sg StateGood) handle() {
+	fmt.Println("Hello World! I'm good")
+}
+
+type StateBad struct {}
+
+func (sb StateBad) handle() {
+	fmt.Println("Hello World! I'm bad")
+}
+
+// STEP 2:Define the context object that manages state transform
+type Context struct {
+	state State
+}
+
+func (ctx *Context) ChangeState(s *State) {
+	ctx.state = *s
+}
+
+func (ctx *Context) Request() {
+	switch ctx.state.(type) {
+	case StateBad:
+		ctx.state = StateGood{}
+	case StateGood:
+		ctx.state = StateBad{}
+	default:
+		ctx.state = StateGood{}
+	}
+
+	ctx.state.handle()
+}
+```

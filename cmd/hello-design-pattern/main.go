@@ -5,6 +5,9 @@ import (
 	"github.com/Margular/hello-design-pattern/behavioral/chainOfResponsibility"
 	"github.com/Margular/hello-design-pattern/behavioral/command"
 	"github.com/Margular/hello-design-pattern/behavioral/interpreter"
+	"github.com/Margular/hello-design-pattern/behavioral/mediator"
+	"github.com/Margular/hello-design-pattern/behavioral/memento"
+	"github.com/Margular/hello-design-pattern/behavioral/state"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory/factory"
 	"github.com/Margular/hello-design-pattern/creational/builder"
@@ -141,5 +144,45 @@ func main() {
 	helloInter.Interpret("println('hello world')")
 	fmt.Println()
 
+	fmt.Println("16. Iterator: ")
+	fmt.Println("skip\n")
 
+	fmt.Println("17. Mediator: ")
+	m := mediator.Mediator{}
+
+	c1 := mediator.Collegue{1, &m}
+	c2 := mediator.Collegue{2, &m}
+	c3 := mediator.Collegue{3, &m}
+
+
+	m.Register(&c1)
+	m.Register(&c2)
+	m.Register(&c3)
+
+	c1.SendMsg(2, "Hello Tom")
+	c3.SendMsg(1, "Hello Jerry")
+	c2.SendMsg(1, "Hello Jerry")
+	fmt.Println()
+
+	fmt.Println("18. Memento: ")
+	originator := memento.Originator{}
+	careTaker := memento.CareTaker{}
+	originator.State = "Hello World"
+	careTaker.Add(originator.SaveStateToMemento())
+	originator.State = "Goodbye World"
+	careTaker.Add(originator.SaveStateToMemento())
+	fmt.Println("Current State: " + originator.State)
+	originator.GetStateFromMemento(careTaker.Get(0))
+	fmt.Println("Current State: " + originator.State)
+	fmt.Println()
+
+	fmt.Println("19. Observer: ")
+	fmt.Println("skip")
+	fmt.Println()
+
+	fmt.Println("20. State: ")
+	ctx := state.Context{}
+	ctx.Request()
+	ctx.Request()
+	ctx.Request()
 }
