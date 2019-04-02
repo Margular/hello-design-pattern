@@ -8,6 +8,7 @@ import (
 	"github.com/Margular/hello-design-pattern/behavioral/mediator"
 	"github.com/Margular/hello-design-pattern/behavioral/memento"
 	"github.com/Margular/hello-design-pattern/behavioral/state"
+	"github.com/Margular/hello-design-pattern/behavioral/visitor"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory"
 	"github.com/Margular/hello-design-pattern/creational/abstractFactory/factory"
 	"github.com/Margular/hello-design-pattern/creational/builder"
@@ -185,4 +186,15 @@ func main() {
 	ctx.Request()
 	ctx.Request()
 	ctx.Request()
+	fmt.Println()
+
+	fmt.Println("21. Strategy: ")
+	fmt.Println("skip\n")
+
+	fmt.Println("22. Template Method: ")
+	fmt.Println("skip\n")
+
+	fmt.Println("23. Visitor: ")
+	h := visitor.House{}
+	h.Accept(visitor.PersonVisitor{})
 }
